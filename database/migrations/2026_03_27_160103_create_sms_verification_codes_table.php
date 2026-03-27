@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('sms_verification_codes', function (Blueprint $table) {
+            $table->id();
+            $table->string('phone');
+            $table->string('code');         // se guardará con hash
+            $table->unsignedTinyInteger('attempts')->default(0);
+            $table->timestamp('expires_at');
+            $table->timestamp('used_at')->nullable();
+            $table->timestamp('created_at')->nullable();
+            
+            $table->index('phone');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('sms_verification_codes');
+    }
+};
