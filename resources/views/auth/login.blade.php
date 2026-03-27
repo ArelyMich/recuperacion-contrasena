@@ -1,7 +1,12 @@
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
-
+    @if (session('status'))
+        <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg
+                    text-sm font-medium text-green-700">
+            {{ session('status') }}
+        </div>
+    @endif
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
@@ -33,11 +38,12 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
+             <div class="flex flex-col items-end gap-1">
+            <a href="{{ route('password.choose') }}"
+            class="text-sm text-indigo-600 hover:text-indigo-900">
+                ¿Olvidaste tu contraseña?
+            </a>
+            </div>
 
             <x-primary-button class="ms-3">
                 {{ __('Log in') }}

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\EmailResetController;
+use App\Http\Controllers\Auth\SmsResetController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -34,6 +35,34 @@ Route::middleware('guest')->group(function () {
     Route::post('/password/email/update',
         [EmailResetController::class, 'resetPassword'])
         ->name('password.email.update');
+
+    Route::get('/password/sms/request',
+        [SmsResetController::class, 'showRequestForm'])
+        ->name('password.sms.request');
+
+    Route::post('/password/sms/send',
+        [SmsResetController::class, 'sendOtp'])
+        ->name('password.sms.send');
+
+    Route::get('/password/sms/verify',
+        [SmsResetController::class, 'showVerifyForm'])
+        ->name('password.sms.verify.form');
+
+    Route::post('/password/sms/verify',
+        [SmsResetController::class, 'verifyOtp'])
+        ->name('password.sms.verify');
+
+    Route::get('/password/sms/new',
+        [SmsResetController::class, 'showNewPasswordForm'])
+        ->name('password.sms.new');
+
+    Route::post('/password/sms/update',
+        [SmsResetController::class, 'resetPassword'])
+        ->name('password.sms.update');
+
+    Route::get('/password/choose',
+        fn() => view('auth.forgot-password-choose'))
+        ->name('password.choose');
 });
 
 require __DIR__.'/auth.php';
