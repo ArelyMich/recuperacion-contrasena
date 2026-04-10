@@ -33,12 +33,14 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'phone'    => ['nullable', 'string', 'regex:/^\+[1-9]\d{7,14}$/'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone'    => $request->phone ?: null,
             'password' => Hash::make($request->password),
         ]);
 
