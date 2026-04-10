@@ -2,6 +2,19 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Log;
+
+class TwilioService
+{
+    public function sendSms(string $to, string $message): bool
+    {
+        Log::channel('daily')->info("📱 SMS → {$to} | {$message}");
+        return true;
+    }
+}
+
+/*namespace App\Services;
+
 use Twilio\Rest\Client;
 use Illuminate\Support\Facades\Log;
 
@@ -32,4 +45,4 @@ class TwilioService
             return false;
         }
     }
-}
+}*/

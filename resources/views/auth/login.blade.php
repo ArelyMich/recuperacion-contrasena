@@ -1,53 +1,75 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-    @if (session('status'))
-        <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg
-                    text-sm font-medium text-green-700">
-            {{ session('status') }}
+@extends('layouts.auth_custom')
+@section('title', 'Iniciar sesión')
+@section('panel-title', 'Bienvenido de vuelta.')
+
+@section('content')
+
+@if (session('status'))
+    <div class="alert alert-success">
+        <svg viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M5 8l2.5 2.5L11 5.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        {{ session('status') }}
+    </div>
+@endif
+<div class="card">
+<h1 class="auth-form-title">Iniciar sesión</h1>
+<p class="auth-form-subtitle">Ingresa tus credenciales para continuar.</p>
+
+<form method="POST" action="{{ route('login') }}">
+    @csrf
+
+    <div class="form-group">
+        <label class="form-label" for="email">Correo electrónico</label>
+        <input id="email" class="form-input {{ $errors->has('email') ? 'error' : '' }}"
+            type="email" name="email" value="{{ old('email') }}"
+            placeholder="tu@correo.com" required autofocus autocomplete="username">
+        @error('email')
+            <p class="form-error">{{ $message }}</p>
+        @enderror
+    </div>
+
+    <div class="form-group">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <label class="form-label" for="password" style="margin:0">Contraseña</label>
         </div>
-    @endif
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+        <input id="password" class="form-input {{ $errors->has('password') ? 'error' : '' }}"
+            type="password" name="password" placeholder="••••••••"
+            required autocomplete="current-password">
+        @error('password')
+            <p class="form-error">{{ $message }}</p>
+        @enderror
+    </div>
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:1.25rem">
+        <input id="remember_me" type="checkbox" name="remember"
+            style="width:15px;height:15px;accent-color:var(--carbon-900);cursor:pointer">
+        <label for="remember_me" style="font-size:12px;color:var(--sand-400);cursor:pointer">
+            Recordar sesión
+        </label>
+    </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+    <button type="submit" class="btn btn-dark">
+        Iniciar sesión
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+    </button>
+</form>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
+ <div class="flex items-center justify-end mt-4">
              <div class="flex flex-col items-end gap-1">
-            <a href="{{ route('password.choose') }}"
-            class="text-sm text-indigo-600 hover:text-indigo-900">
+       <a href="{{ route('password.choose') }}"
+               style="font-size:15px;color:var(--sand-400);text-decoration:none">
                 ¿Olvidaste tu contraseña?
             </a>
-            </div>
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
+  </div>
         </div>
-    </form>
-</x-guest-layout>
+<div class="auth-form-footer" style="margin-top:1.5rem">
+    ¿No tienes cuenta?
+    <a href="{{ route('register') }}">Regístrate gratis</a>
+</div>
+</div>
+@endsection
